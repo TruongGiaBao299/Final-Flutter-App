@@ -74,37 +74,50 @@ class _MainScreenState extends State<MainScreen> {
           ProfileScreen(),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showAddOptions(context);
-        },
-        child: const Icon(Icons.add),
-        backgroundColor: Colors.blue,
+      floatingActionButton: SizedBox(
+        width: 40.0,
+        height: 40.0,
+        child: FloatingActionButton(
+          onPressed: () {
+            _showAddOptions(context);
+          },
+          child: const Icon(Icons.add),
+          backgroundColor: Colors.blue,
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed, // Disable animation
+        type: BottomNavigationBarType.fixed,
         elevation: 8.0,
         backgroundColor: Colors.white,
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
+        selectedFontSize: 14.0,
+        unselectedFontSize: 14.0,
+        selectedIconTheme: IconThemeData(size: 28.0),
+        unselectedIconTheme: IconThemeData(size: 28.0),
+        selectedLabelStyle: TextStyle(fontSize: 14.0),
+        unselectedLabelStyle: TextStyle(fontSize: 14.0),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(
+              Icons.home,
+              size: 20.0,
+            ),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.lightbulb),
+            icon: Icon(Icons.lightbulb, size: 20.0),
             label: 'Solution',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.library_books),
+            icon: Icon(Icons.library_books, size: 20.0),
             label: 'Library',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: Icon(Icons.person, size: 20.0),
             label: 'Profile',
           ),
         ],
