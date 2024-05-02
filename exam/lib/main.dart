@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'MainScreen.dart';
 import 'register.dart';
+import 'MainScreen.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -11,7 +11,7 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -23,6 +23,7 @@ class _MyAppState extends State<MyApp> {
   final _formKey = GlobalKey<FormState>();
   bool _obscureText = true;
   bool _isLoading = false;
+
   void login() {
     if (_formKey.currentState!.validate()) {
       setState(() {
@@ -49,92 +50,92 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Email',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText:
-                          'Nhập địa chỉ email hoặc tên người dùng của bạn'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Không được để trống tên người dùng hoặc email';
-                    } else if (value.length < 6) {
-                      return 'Tên người dùng quá ngắn. Xin vui lòng thử lại';
-                    } else if (!value.contains('@')) {
-                      return 'Email không đúng định dạng. Vui lòng thử lại';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(
-                  height: 22,
-                ),
-                Text(
-                  'Mật khẩu',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  controller: _passwordController,
-                  obscureText: _obscureText,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Nhập mật khẩu của bạn',
-                      suffixIcon: IconButton(
-                          onPressed: showPassword,
-                          icon: _obscureText
-                              ? Icon(Icons.visibility)
-                              : Icon(Icons.visibility_off))),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Không được để trống mật khẩu';
-                    } else if (value.length < 6) {
-                      return 'Mật khẩu quá ngắn, vui lòng thử lại';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                RichText(
-                  text: TextSpan(
-                    style: TextStyle(color: Colors.black),
-                    children: <TextSpan>[
-                      TextSpan(
-                          text: 'Bằng cách nhấn Đăng nhập, bạn chấp nhận '),
-                      TextSpan(
-                          text: 'Điều khoản dịch vụ',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      TextSpan(text: ' và '),
-                      TextSpan(
-                          text: 'Chính sách quyền riêng tư',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      TextSpan(text: ' của chúng tôi'),
-                    ],
+      body: Center(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(16.0),
+          child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Email',
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                ),
-                SizedBox(
-                  height: 22,
-                ),
-                Center(
-                  child: SizedBox(
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText:
+                            'Nhập địa chỉ email hoặc tên người dùng của bạn'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Không được để trống tên người dùng hoặc email';
+                      } else if (value.length < 6) {
+                        return 'Tên người dùng quá ngắn. Xin vui lòng thử lại';
+                      } else if (!value.contains('@')) {
+                        return 'Email không đúng định dạng. Vui lòng thử lại';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 22,
+                  ),
+                  Text(
+                    'Mật khẩu',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    controller: _passwordController,
+                    obscureText: _obscureText,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Nhập mật khẩu của bạn',
+                        suffixIcon: IconButton(
+                            onPressed: showPassword,
+                            icon: _obscureText
+                                ? Icon(Icons.visibility)
+                                : Icon(Icons.visibility_off))),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Không được để trống mật khẩu';
+                      } else if (value.length < 6) {
+                        return 'Mật khẩu quá ngắn, vui lòng thử lại';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.black),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: 'Bằng cách nhấn Đăng nhập, bạn chấp nhận '),
+                        TextSpan(
+                            text: 'Điều khoản dịch vụ',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        TextSpan(text: ' và '),
+                        TextSpan(
+                            text: 'Chính sách quyền riêng tư',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        TextSpan(text: ' của chúng tôi'),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 22,
+                  ),
+                  SizedBox(
                     width: double.infinity,
                     height: 60,
                     child: ElevatedButton(
@@ -154,12 +155,10 @@ class _MyAppState extends State<MyApp> {
                               )
                             : const Text('Đăng nhập')),
                   ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Center(
-                  child: SizedBox(
+                  SizedBox(
+                    height: 10,
+                  ),
+                  SizedBox(
                     width: double.infinity,
                     height: 60,
                     child: ElevatedButton(
@@ -173,9 +172,9 @@ class _MyAppState extends State<MyApp> {
                       ),
                     ),
                   ),
-                ),
-              ],
-            )),
+                ],
+              )),
+        ),
       ),
     );
   }
