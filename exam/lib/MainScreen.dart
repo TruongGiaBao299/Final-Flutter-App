@@ -72,7 +72,6 @@ class _MainScreenState extends State<MainScreen> {
           SolutionScreen(),
           LibraryScreen(),
           ProfileScreen(),
-          ,
         ],
       ),
       floatingActionButton: FloatingActionButton(
