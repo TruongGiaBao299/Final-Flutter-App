@@ -3,6 +3,9 @@ import 'home_screen.dart';
 import 'profile_screen.dart';
 import 'library_screen.dart';
 import 'solution_screen.dart';
+import 'create_studyset.dart';
+import 'create_folder.dart';
+import 'create_classes.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -36,24 +39,39 @@ class _MainScreenState extends State<MainScreen> {
               leading: const Icon(Icons.book),
               title: const Text('Create Study Set'),
               onTap: () {
-                Navigator.pop(context);
-                print('Creating study set...');
+                Navigator.pop(context); // Close the bottom sheet
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          CreateStudySet()), // Navigate to CreateStudySet
+                );
               },
             ),
             ListTile(
               leading: const Icon(Icons.folder),
               title: const Text('Create Folder'),
               onTap: () {
-                Navigator.pop(context);
-                print('Creating folder...');
+                Navigator.pop(context); // Close the bottom sheet
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          CreateFolder()), // Navigate to CreateFolder
+                );
               },
             ),
             ListTile(
               leading: const Icon(Icons.class_),
               title: const Text('Create Class'),
               onTap: () {
-                Navigator.pop(context);
-                print('Creating class...');
+                Navigator.pop(context); // Close the bottom sheet
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          CreateClasses()), // Navigate to CreateClasses
+                );
               },
             ),
           ],

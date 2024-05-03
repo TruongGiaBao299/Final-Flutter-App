@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'create_studyset.dart';
+import 'create_classes.dart';
+import 'create_folder.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({Key? key});
@@ -16,32 +19,15 @@ class _LibraryScreenState extends State<LibraryScreen> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 20), // Some top space
             Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 20.0),
-                    child: Text(
-                      'Library',
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 20.0),
-                    child: IconButton(
-                      icon: const Icon(Icons.add),
-                      onPressed: () {
-                        // Add your action here
-                      },
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
+              child: const Padding(
+                padding: EdgeInsets.only(left: 20.0),
+                child: Text(
+                  'Library',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
             const SizedBox(height: 20), // Some space between title and content
@@ -58,16 +44,38 @@ class _LibraryScreenState extends State<LibraryScreen> {
               child: IndexedStack(
                 index: _selectedIndex,
                 children: [
-                  StudySetsContent(),
-                  ClassesContent(
-                    onCreateNew: () {
-                      // Add your action to create new class
-                    },
+                  Center(
+                    child: StudySetsContent(
+                      onCreateNew: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CreateStudySet()),
+                        );
+                      },
+                    ),
                   ),
-                  FoldersContent(
-                    onCreateNew: () {
-                      // Add your action to create new folder
-                    },
+                  Center(
+                    child: ClassesContent(
+                      onCreateNew: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CreateClasses()),
+                        );
+                      },
+                    ),
+                  ),
+                  Center(
+                    child: FoldersContent(
+                      onCreateNew: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CreateFolder()),
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -109,16 +117,75 @@ class _LibraryScreenState extends State<LibraryScreen> {
       ),
     );
   }
+
+  void _showAddOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Wrap(
+          children: <Widget>[
+            ListTile(
+              leading: const Icon(Icons.book),
+              title: const Text('Create Study Set'),
+              onTap: () {
+                Navigator.pop(context); // Close the bottom sheet
+                if (_selectedIndex == 0) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CreateStudySet()),
+                  );
+                }
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.folder),
+              title: const Text('Create Folder'),
+              onTap: () {
+                Navigator.pop(context); // Close the bottom sheet
+                if (_selectedIndex == 2) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CreateFolder()),
+                  );
+                }
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.class_),
+              title: const Text('Create Class'),
+              onTap: () {
+                Navigator.pop(context); // Close the bottom sheet
+                if (_selectedIndex == 1) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CreateClasses()),
+                  );
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 class StudySetsContent extends StatelessWidget {
+  final VoidCallback onCreateNew;
+
+  const StudySetsContent({required this.onCreateNew});
+
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Study Sets Content',
-        style: TextStyle(fontSize: 20),
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ElevatedButton(
+          onPressed: onCreateNew,
+          child: const Text('Create New Study Set'),
+        ),
+        const SizedBox(height: 20),
+      ],
     );
   }
 }
@@ -133,11 +200,9 @@ class ClassesContent extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Center(
-          child: ElevatedButton(
-            onPressed: onCreateNew,
-            child: const Text('Create New Class'),
-          ),
+        ElevatedButton(
+          onPressed: onCreateNew,
+          child: const Text('Create New Class'),
         ),
       ],
     );
@@ -154,11 +219,9 @@ class FoldersContent extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Center(
-          child: ElevatedButton(
-            onPressed: onCreateNew,
-            child: const Text('Create New Folder'),
-          ),
+        ElevatedButton(
+          onPressed: onCreateNew,
+          child: const Text('Create New Folder'),
         ),
       ],
     );
