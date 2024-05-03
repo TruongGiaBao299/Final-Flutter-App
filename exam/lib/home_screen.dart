@@ -4,13 +4,13 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 225, 229, 232),
+      backgroundColor: Colors.white, // Changed background color to white
       body: ListView(
         scrollDirection: Axis.vertical,
         children: [
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+          const SizedBox(height: 10),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -30,22 +30,23 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
             child: TextField(
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
                 hintText: 'Search...',
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
             ),
           ),
-          SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          const SizedBox(height: 10),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -68,7 +69,7 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           SizedBox(
             height: 150,
             child: ListView.builder(
@@ -78,16 +79,21 @@ class HomeScreen extends StatelessWidget {
                 return SizedBox(
                   width: 250,
                   child: Card(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 5.0),
                     color: Colors.white,
+                    elevation: 10, // Added elevation for shadow
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
                   ),
                 );
               },
             ),
           ),
-          SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          const SizedBox(height: 10),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -110,7 +116,7 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           SizedBox(
             height: 150,
             child: ListView.builder(
@@ -120,16 +126,21 @@ class HomeScreen extends StatelessWidget {
                 return SizedBox(
                   width: 250,
                   child: Card(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 5.0),
                     color: Colors.white,
+                    elevation: 10, // Added elevation for shadow
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
                   ),
                 );
               },
             ),
           ),
-          SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          const SizedBox(height: 10),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -152,7 +163,7 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           SizedBox(
             height: 150,
             child: ListView.builder(
@@ -162,14 +173,19 @@ class HomeScreen extends StatelessWidget {
                 return SizedBox(
                   width: 250,
                   child: Card(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 5.0),
                     color: Colors.white,
+                    elevation: 10, // Added elevation for shadow
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
                   ),
                 );
               },
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
         ],
       ),
     );

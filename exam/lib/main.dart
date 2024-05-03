@@ -6,7 +6,7 @@ void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     theme: ThemeData(useMaterial3: false),
-    home: MyApp(),
+    home: const MyApp(),
   ));
 }
 
@@ -29,9 +29,9 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         _isLoading = true;
       });
-      Future.delayed(Duration(seconds: 2), () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => MainScreen()));
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const MainScreen()));
       });
     }
   }
@@ -43,8 +43,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   void register() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => RegisterScreen()));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const RegisterScreen()));
   }
 
   @override
@@ -52,22 +52,22 @@ class _MyAppState extends State<MyApp> {
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Email',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   TextFormField(
                     controller: _emailController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         hintText:
                             'Nhập địa chỉ email hoặc tên người dùng của bạn'),
@@ -82,27 +82,27 @@ class _MyAppState extends State<MyApp> {
                       return null;
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 22,
                   ),
-                  Text(
+                  const Text(
                     'Mật khẩu',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   TextFormField(
                     controller: _passwordController,
                     obscureText: _obscureText,
                     decoration: InputDecoration(
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                         hintText: 'Nhập mật khẩu của bạn',
                         suffixIcon: IconButton(
                             onPressed: showPassword,
                             icon: _obscureText
-                                ? Icon(Icons.visibility)
-                                : Icon(Icons.visibility_off))),
+                                ? const Icon(Icons.visibility)
+                                : const Icon(Icons.visibility_off))),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Không được để trống mật khẩu';
@@ -112,11 +112,11 @@ class _MyAppState extends State<MyApp> {
                       return null;
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 12,
                   ),
                   RichText(
-                    text: TextSpan(
+                    text: const TextSpan(
                       style: TextStyle(color: Colors.black),
                       children: <TextSpan>[
                         TextSpan(
@@ -132,7 +132,7 @@ class _MyAppState extends State<MyApp> {
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 22,
                   ),
                   SizedBox(
@@ -141,10 +141,10 @@ class _MyAppState extends State<MyApp> {
                     child: ElevatedButton(
                         style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(
-                                Color.fromARGB(255, 14, 2, 241))),
+                                const Color.fromARGB(255, 14, 2, 241))),
                         onPressed: login,
                         child: _isLoading
-                            ? SizedBox(
+                            ? const SizedBox(
                                 width: 20,
                                 height: 20,
                                 child: CircularProgressIndicator(
@@ -155,7 +155,7 @@ class _MyAppState extends State<MyApp> {
                               )
                             : const Text('Đăng nhập')),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   SizedBox(
