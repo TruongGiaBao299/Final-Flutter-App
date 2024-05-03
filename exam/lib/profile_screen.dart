@@ -1,5 +1,23 @@
 import 'package:flutter/material.dart';
 
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Profile Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: ProfileScreen(),
+    );
+  }
+}
+
 class ProfileScreen extends StatefulWidget {
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -9,6 +27,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String _username = 'JohnDoe';
   String _email = 'johndoe@example.com';
   String _password = 'password123';
+  bool _pushNotificationsEnabled = true;
+  bool _soundEffectsEnabled = true;
 
   @override
   Widget build(BuildContext context) {
@@ -19,28 +39,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 50),
-                const CircleAvatar(
-                  radius: 50,
-                  backgroundImage: AssetImage('assets/avatar.png'),
-                  backgroundColor: Colors.transparent,
-                  foregroundColor: Colors.black,
+                const Center(
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundImage: AssetImage('assets/avatar.png'),
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: Colors.black,
+                  ),
                 ),
                 const SizedBox(height: 30),
-                Text(
-                  _username,
-                  style: const TextStyle(
-                      fontSize: 30, fontWeight: FontWeight.bold),
+                Center(
+                  child: Text(
+                    _username,
+                    style: const TextStyle(
+                        fontSize: 30, fontWeight: FontWeight.bold),
+                  ),
                 ),
                 const SizedBox(height: 20),
+                const Text(
+                  'Personal info',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
                 PersonalInfoBox(
                   username: _username,
                   email: _email,
                   password: _password,
                   onChanged: (String username, String email, String password) {
                     _updateInfo(username, email, password);
+                  },
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Preferences',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                PreferencesInfoBox(
+                  pushNotificationsEnabled: _pushNotificationsEnabled,
+                  soundEffectsEnabled: _soundEffectsEnabled,
+                  onToggle: (bool pushNotifications, bool soundEffects) {
+                    setState(() {
+                      _pushNotificationsEnabled = pushNotifications;
+                      _soundEffectsEnabled = soundEffects;
+                    });
                   },
                 ),
                 const SizedBox(height: 20),
@@ -71,6 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 30),
               ],
             ),
           ),
@@ -210,5 +254,77 @@ class PersonalInfoBox extends StatelessWidget {
         ));
       }
     });
+  }
+}
+
+class PreferencesInfoBox extends StatelessWidget {
+  final bool pushNotificationsEnabled;
+  final bool soundEffectsEnabled;
+  final Function(bool, bool) onToggle;
+
+  const PreferencesInfoBox({
+    Key? key,
+    required this.pushNotificationsEnabled,
+    required this.soundEffectsEnabled,
+    required this.onToggle,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.symmetric(vertical: 20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: const Offset(0, 3),
+          ),
+        ],
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSwitchTile(
+            'Push Notifications',
+            pushNotificationsEnabled,
+            (value) {
+              onToggle(value, soundEffectsEnabled);
+            },
+          ),
+          _buildSwitchTile(
+            'Sound Effects',
+            soundEffectsEnabled,
+            (value) {
+              onToggle(pushNotificationsEnabled, value);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSwitchTile(String label, bool value, Function(bool) onChanged) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(fontSize: 18),
+          ),
+          Switch(
+            value: value,
+            onChanged: onChanged,
+          ),
+        ],
+      ),
+    );
   }
 }
