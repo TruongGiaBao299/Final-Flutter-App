@@ -32,9 +32,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Text(
                   _username,
                   style: const TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.bold),
+                      fontSize: 30, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
                 PersonalInfoBox(
                   username: _username,
                   email: _email,
