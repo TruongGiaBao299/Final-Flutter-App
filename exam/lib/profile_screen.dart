@@ -14,34 +14,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white, // Set background color to white
+        backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 50), // Adjusted space
+                const SizedBox(height: 50),
                 CircleAvatar(
                   radius: 50,
-                  backgroundImage:
-                      AssetImage('assets/avatar.png'), // Your avatar image
-                  backgroundColor: Colors.transparent, // Transparent background
-                  foregroundColor: Colors.black, // Border color
+                  backgroundImage: AssetImage('assets/avatar.png'),
+                  backgroundColor: Colors.transparent,
+                  foregroundColor: Colors.black,
                 ),
-                const SizedBox(height: 30), // Adjusted space
+                const SizedBox(height: 30),
                 Text(
                   _username,
                   style: const TextStyle(
                       fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 30), // Adjusted space
+                const SizedBox(height: 30),
                 PersonalInfoBox(
                   username: _username,
                   email: _email,
                   password: _password,
-                  onChanged: (String value) {
-                    _updateInfo(value);
+                  onChanged: (String username, String email, String password) {
+                    _updateInfo(username, email, password);
                   },
                 ),
                 const SizedBox(height: 20),
@@ -50,15 +49,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(context); // Navigate back to main.dart
+                      Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white, // Button color
-                      elevation: 5, // Shadow elevation
+                      backgroundColor: Colors.white,
+                      elevation: 5,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                         side: const BorderSide(
-                          color: Colors.grey, // Grey border line
+                          color: Colors.grey,
                         ),
                       ),
                     ),
@@ -67,7 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey, // Grey text color
+                        color: Colors.grey,
                       ),
                     ),
                   ),
@@ -80,9 +79,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  void _updateInfo(String value) {
+  void _updateInfo(String username, String email, String password) {
     setState(() {
-      _username = value;
+      _username = username;
+      _email = email;
+      _password = password;
     });
   }
 }
@@ -91,7 +92,7 @@ class PersonalInfoBox extends StatelessWidget {
   final String username;
   final String email;
   final String password;
-  final ValueChanged<String> onChanged;
+  final Function(String, String, String) onChanged;
 
   const PersonalInfoBox({
     Key? key,
@@ -110,13 +111,13 @@ class PersonalInfoBox extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5), // Shadow color
+            color: Colors.grey.withOpacity(0.5),
             spreadRadius: 2,
             blurRadius: 5,
-            offset: const Offset(0, 3), // changes position of shadow
+            offset: const Offset(0, 3),
           ),
         ],
-        border: Border.all(color: Colors.grey), // Added border line
+        border: Border.all(color: Colors.grey),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
@@ -197,7 +198,13 @@ class PersonalInfoBox extends StatelessWidget {
       },
     ).then((newValue) {
       if (newValue != null) {
-        onChanged(newValue); // Update the value
+        if (label == 'Username') {
+          onChanged(newValue, email, password);
+        } else if (label == 'Email') {
+          onChanged(username, newValue, password);
+        } else if (label == 'Password') {
+          onChanged(username, email, newValue);
+        }
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('$label updated to: $newValue'),
         ));
