@@ -23,8 +23,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 20.0),
                     child: Text(
                       'Library',
                       style:
@@ -34,7 +34,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                   Padding(
                     padding: const EdgeInsets.only(right: 20.0),
                     child: IconButton(
-                      icon: Icon(Icons.add),
+                      icon: const Icon(Icons.add),
                       onPressed: () {
                         // Add your action here
                       },
@@ -58,9 +58,17 @@ class _LibraryScreenState extends State<LibraryScreen> {
               child: IndexedStack(
                 index: _selectedIndex,
                 children: [
-                  _buildContent('Study Sets Content'),
-                  _buildContent('Classes Content'),
-                  _buildContent('Folders Content'),
+                  StudySetsContent(),
+                  ClassesContent(
+                    onCreateNew: () {
+                      // Add your action to create new class
+                    },
+                  ),
+                  FoldersContent(
+                    onCreateNew: () {
+                      // Add your action to create new folder
+                    },
+                  ),
                 ],
               ),
             ),
@@ -101,13 +109,58 @@ class _LibraryScreenState extends State<LibraryScreen> {
       ),
     );
   }
+}
 
-  Widget _buildContent(String contentText) {
-    return Center(
+class StudySetsContent extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
       child: Text(
-        contentText,
+        'Study Sets Content',
         style: TextStyle(fontSize: 20),
       ),
+    );
+  }
+}
+
+class ClassesContent extends StatelessWidget {
+  final VoidCallback onCreateNew;
+
+  const ClassesContent({required this.onCreateNew});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Center(
+          child: ElevatedButton(
+            onPressed: onCreateNew,
+            child: const Text('Create New Class'),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class FoldersContent extends StatelessWidget {
+  final VoidCallback onCreateNew;
+
+  const FoldersContent({required this.onCreateNew});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Center(
+          child: ElevatedButton(
+            onPressed: onCreateNew,
+            child: const Text('Create New Folder'),
+          ),
+        ),
+      ],
     );
   }
 }
