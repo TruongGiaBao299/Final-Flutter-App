@@ -11,7 +11,7 @@ class SolutionScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const SizedBox(height: 30),
+            const SizedBox(height: 15),
             const Center(
               child: Padding(
                 padding: EdgeInsets.all(10.0),

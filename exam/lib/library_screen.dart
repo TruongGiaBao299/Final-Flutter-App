@@ -21,14 +21,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
         child: Column(
           children: [
             const SizedBox(height: 20), // Some top space
-            Container(
-              child: const Padding(
-                padding: EdgeInsets.only(left: 20.0),
-                child: Text(
-                  'Library',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-              ),
+            const Text(
+              'Library',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20), // Some space between title and content
             Row(
