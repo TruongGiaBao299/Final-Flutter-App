@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'register.dart';
+import 'reset_password.dart';
 import 'MainScreen.dart';
 
 void main() {
@@ -18,8 +19,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _obscureText = true;
   bool _isLoading = false;
@@ -32,6 +33,11 @@ class _MyAppState extends State<MyApp> {
       Future.delayed(const Duration(seconds: 2), () {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const MainScreen()));
+        setState(() {
+          _isLoading = false;
+          _emailController.clear();
+          _passwordController.clear();
+        });
       });
     }
   }
@@ -85,9 +91,28 @@ class _MyAppState extends State<MyApp> {
                   const SizedBox(
                     height: 22,
                   ),
-                  const Text(
-                    'Mật khẩu',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Mật khẩu',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => resetPassword()));
+                        },
+                        mouseCursor: SystemMouseCursors.click,
+                        child: Text(
+                          'Quên mật khẩu',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.blue),
+                        ),
+                      )
+                    ],
                   ),
                   const SizedBox(
                     height: 10,
