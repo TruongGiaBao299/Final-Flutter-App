@@ -1,3 +1,5 @@
+import 'package:exam/MainScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -35,14 +37,46 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
   }
 
-  void register() {
+  void register() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _showError ? _isLoading = false : _isLoading = true;
       });
       _isLoading
-          ? Future.delayed(Duration(seconds: 2), () {
-              Navigator.pop(context);
+          ? Future.delayed(Duration(seconds: 2), () async {
+              if (_passwordController.text != "" &&
+                  _emailController.text != "" &&
+                  _usernameController.text != "") {
+                try {
+                  await FirebaseAuth.instance
+                      .createUserWithEmailAndPassword(
+                          email: _emailController.text,
+                          password: _passwordController.text);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                    'Register Successfully',
+                    style: TextStyle(fontSize: 20),
+                  )));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MainScreen()));
+                } on FirebaseAuthException catch (e) {
+                  if (e.code == 'weak-password') {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor: Colors.orangeAccent,
+                        content: Text(
+                          'Provided Password is too weak',
+                          style: TextStyle(fontSize: 20),
+                        )));
+                  } else if (e.code == 'email-already-in-use') {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor: Colors.orangeAccent,
+                        content: Text(
+                          'Account already exists',
+                          style: TextStyle(fontSize: 20),
+                        )));
+                  }
+                }
+              }
             })
           : null;
     }
@@ -52,7 +86,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.only(top: 60, left: 10, right: 10),
         child: Form(
             key: _formKey,
             child: Column(
@@ -202,6 +236,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ),
                               )
                             : const Text('Đăng ký')),
+                        // child: Text('Đăng kí')),
                   ),
                 ),
                 SizedBox(

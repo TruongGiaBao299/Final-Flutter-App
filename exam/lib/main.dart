@@ -1,9 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'register.dart';
 import 'reset_password.dart';
 import 'MainScreen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     theme: ThemeData(useMaterial3: false),
@@ -25,19 +29,48 @@ class _MyAppState extends State<MyApp> {
   bool _obscureText = true;
   bool _isLoading = false;
 
-  void login() {
+  void login() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
       });
-      Future.delayed(const Duration(seconds: 2), () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const MainScreen()));
-        setState(() {
-          _isLoading = false;
-          _emailController.clear();
-          _passwordController.clear();
-        });
+      Future.delayed(const Duration(seconds: 2), () async {
+        // await FirebaseAuth.instance.signInWithEmailAndPassword(
+        //     email: _emailController.text, password: _passwordController.text);
+        // Navigator.push(context,
+        //     MaterialPageRoute(builder: (context) => const MainScreen()));
+        // setState(() {
+        //   _isLoading = false;
+        //   _emailController.clear();
+        //   _passwordController.clear();
+        // });
+        try {
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+              email: _emailController.text, password: _passwordController.text);
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => MainScreen()));
+          setState(() {
+            _isLoading = false;
+            _emailController.clear();
+            _passwordController.clear();
+          });
+        } on FirebaseAuthException catch (e) {
+          if (e.code == 'user-not-found') {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                backgroundColor: Colors.orangeAccent,
+                content: Text(
+                  'No User Found for that Email',
+                  style: TextStyle(fontSize: 20),
+                )));
+          } else if (e.code == 'wrong-password') {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                backgroundColor: Colors.orangeAccent,
+                content: Text(
+                  'Wrong Password Provided by User',
+                  style: TextStyle(fontSize: 20),
+                )));
+          }
+        }
       });
     }
   }
@@ -167,7 +200,9 @@ class _MyAppState extends State<MyApp> {
                         style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(
                                 const Color.fromARGB(255, 14, 2, 241))),
-                        onPressed: login,
+                        onPressed: () {
+                          login();
+                        },
                         child: _isLoading
                             ? const SizedBox(
                                 width: 20,

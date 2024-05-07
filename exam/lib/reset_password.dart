@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'confirm_reset.dart';
 
@@ -18,18 +20,27 @@ class _resetPasswordState extends State<resetPassword> {
       setState(() {
         _isLoading = true;
       });
-      Future.delayed(Duration(seconds: 2), () {
+      Future.delayed(Duration(seconds: 2), () async {
         String email = resetPass.text;
+        try {
+          await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => confirmReset(email: email)));
+        } on FirebaseAuthException catch (e) {
+          if (e.code == "user-not-found") {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+              'No user found for that email',
+              style: TextStyle(fontSize: 20),
+            )));
+          }
+        }
         setState(() {
           _isLoading = false;
           resetPass.clear();
         });
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => confirmReset(
-                      email: email,
-                    )));
       });
     }
   }
