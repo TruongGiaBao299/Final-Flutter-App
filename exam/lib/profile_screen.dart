@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,11 +25,15 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  String _username = 'JohnDoe';
-  String _email = 'johndoe@example.com';
-  String _password = 'password123';
+  late User? _user;
   bool _pushNotificationsEnabled = true;
   bool _soundEffectsEnabled = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _user = FirebaseAuth.instance.currentUser;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,29 +56,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     foregroundColor: Colors.black,
                   ),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(
+                    height: 20), // Reduced the space between avatar and text
                 Center(
                   child: Text(
-                    _username,
+                    _user != null
+                        ? _user!.email ?? 'No Email'
+                        : 'Loading...', // Changed to user's email
                     style: const TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold // Reduced font size
+                        ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 30),
                 const Text(
                   'Personal info',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-                PersonalInfoBox(
-                  username: _username,
-                  email: _email,
-                  password: _password,
-                  onChanged: (String username, String email, String password) {
-                    _updateInfo(username, email, password);
-                  },
-                ),
+                _user != null
+                    ? PersonalInfoBox(
+                        email: _user!.email ?? 'No Email',
+                        password: _user!.email != null
+                            ? '*' *
+                                _user!.email!.length // Password with asterisks
+                            : '******',
+                        onChanged: (String email, String password) {
+                          // No need to update email and password here, Firebase Auth handles them
+                        },
+                        onChangePassword: () {
+                          _showChangePasswordDialog(context);
+                        },
+                      )
+                    : CircularProgressIndicator(), // Show loading indicator while waiting for Firebase
                 const SizedBox(height: 20),
                 const Text(
                   'Preferences',
@@ -94,7 +109,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: 60,
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      await FirebaseAuth.instance.signOut();
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
@@ -126,27 +142,90 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  void _updateInfo(String username, String email, String password) {
-    setState(() {
-      _username = username;
-      _email = email;
-      _password = password;
-    });
+  void _showChangePasswordDialog(BuildContext context) {
+    String newPassword = '';
+    String confirmPassword = '';
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Change Password'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextField(
+                decoration: InputDecoration(labelText: 'New Password'),
+                onChanged: (value) {
+                  newPassword = value;
+                },
+                obscureText: true,
+              ),
+              TextField(
+                decoration: InputDecoration(labelText: 'Confirm Password'),
+                onChanged: (value) {
+                  confirmPassword = value;
+                },
+                obscureText: true,
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                if (newPassword == confirmPassword) {
+                  try {
+                    await FirebaseAuth.instance.currentUser!
+                        .updatePassword(newPassword);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Password changed successfully'),
+                      ),
+                    );
+                    Navigator.of(context).pop();
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                            'Failed to change password. Please try again.'),
+                      ),
+                    );
+                  }
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Passwords do not match'),
+                    ),
+                  );
+                }
+              },
+              child: Text('Change'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 
 class PersonalInfoBox extends StatelessWidget {
-  final String username;
   final String email;
   final String password;
-  final Function(String, String, String) onChanged;
+  final Function(String, String) onChanged;
+  final VoidCallback? onChangePassword;
 
   const PersonalInfoBox({
     Key? key,
-    required this.username,
     required this.email,
     required this.password,
     required this.onChanged,
+    this.onChangePassword,
   }) : super(key: key);
 
   @override
@@ -170,14 +249,11 @@ class PersonalInfoBox extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildRow('Username', username, Icons.edit, () {
-            _showEditDialog(context, 'Username', username);
+          _buildRow('Email', email, Icons.mail, () {
+            // No action needed, email is managed by Firebase
           }),
-          _buildRow('Email', email, Icons.edit, () {
-            _showEditDialog(context, 'Email', email);
-          }),
-          _buildRow('Password', '*' * password.length, Icons.edit, () {
-            _showEditDialog(context, 'Password', password);
+          _buildRow('Password', password, Icons.lock, () {
+            if (onChangePassword != null) onChangePassword!();
           }),
         ],
       ),
@@ -207,56 +283,8 @@ class PersonalInfoBox extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 10),
-        const Divider(color: Colors.grey, thickness: 1),
-        const SizedBox(height: 10),
       ],
     );
-  }
-
-  void _showEditDialog(
-      BuildContext context, String label, String currentValue) {
-    final TextEditingController textEditingController =
-        TextEditingController(text: currentValue);
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Edit $label'),
-          content: TextField(
-            controller: textEditingController,
-            decoration: InputDecoration(hintText: 'Enter new $label'),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context, textEditingController.text);
-              },
-              child: const Text('Save'),
-            ),
-          ],
-        );
-      },
-    ).then((newValue) {
-      if (newValue != null) {
-        if (label == 'Username') {
-          onChanged(newValue, email, password);
-        } else if (label == 'Email') {
-          onChanged(username, newValue, password);
-        } else if (label == 'Password') {
-          onChanged(username, email, newValue);
-        }
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('$label updated to: $newValue'),
-        ));
-      }
-    });
   }
 }
 
