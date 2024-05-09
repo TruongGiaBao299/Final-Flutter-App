@@ -143,6 +143,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _showChangePasswordDialog(BuildContext context) {
+    String oldPassword = '';
     String newPassword = '';
     String confirmPassword = '';
 
@@ -154,6 +155,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
+              TextField(
+                decoration: InputDecoration(labelText: 'Old Password'),
+                onChanged: (value) {
+                  oldPassword = value;
+                },
+                obscureText: true,
+              ),
               TextField(
                 decoration: InputDecoration(labelText: 'New Password'),
                 onChanged: (value) {
@@ -181,8 +189,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onPressed: () async {
                 if (newPassword == confirmPassword) {
                   try {
-                    await FirebaseAuth.instance.currentUser!
-                        .updatePassword(newPassword);
+                    // Reauthenticate user
+                    AuthCredential credential = EmailAuthProvider.credential(
+                        email: _user!.email!, password: oldPassword);
+                    await _user!.reauthenticateWithCredential(credential);
+                    // Update password
+                    await _user!.updatePassword(newPassword);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('Password changed successfully'),
