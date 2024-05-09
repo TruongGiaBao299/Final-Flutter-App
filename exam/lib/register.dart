@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -48,13 +48,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   _emailController.text != "" &&
                   _usernameController.text != "") {
                 try {
-                  await FirebaseAuth.instance
-                      .createUserWithEmailAndPassword(
-                          email: _emailController.text,
-                          password: _passwordController.text);
+                  await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                      email: _emailController.text,
+                      password: _passwordController.text);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(
-                    'Register Successfully',
+                    'Đăng ký thành công',
                     style: TextStyle(fontSize: 20),
                   )));
                   Navigator.push(context,
@@ -64,14 +63,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         backgroundColor: Colors.orangeAccent,
                         content: Text(
-                          'Provided Password is too weak',
+                          'Mật khẩu yếu',
                           style: TextStyle(fontSize: 20),
                         )));
                   } else if (e.code == 'email-already-in-use') {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         backgroundColor: Colors.orangeAccent,
                         content: Text(
-                          'Account already exists',
+                          'Tài khoản đã tồn tại',
                           style: TextStyle(fontSize: 20),
                         )));
                   }
@@ -85,9 +84,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: EdgeInsets.only(top: 60, left: 10, right: 10),
-        child: Form(
+      body: Center(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,55 +96,46 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   'Email',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+                SizedBox(height: 10),
                 TextFormField(
                   controller: _emailController,
                   decoration: InputDecoration(
-                      border: OutlineInputBorder(), hintText: 'tên@gmail.com'),
+                      border: OutlineInputBorder(),
+                      hintText: 'email@gmail.com'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Không được để trống email';
+                      return 'Vui lòng nhập email của bạn';
                     } else if (!value.contains('@')) {
-                      return 'Email không đúng định dạng. Vui lòng thử lại';
+                      return 'Email không hợp lệ. Vui lòng thử lại';
                     }
                     return null;
                   },
                 ),
-                SizedBox(
-                  height: 22,
-                ),
+                SizedBox(height: 22),
                 Text(
                   'Tên người dùng',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+                SizedBox(height: 10),
                 TextFormField(
                   controller: _usernameController,
                   decoration: InputDecoration(
-                      border: OutlineInputBorder(), hintText: 'andrew123'),
+                      border: OutlineInputBorder(), hintText: 'Tên người dùng'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Không được để trống tên người dùng';
+                      return 'Vui lòng nhập tên người dùng';
                     } else if (value.length < 6) {
                       return 'Tên người dùng quá ngắn';
                     }
                     return null;
                   },
                 ),
-                SizedBox(
-                  height: 22,
-                ),
+                SizedBox(height: 22),
                 Text(
                   'Mật khẩu',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+                SizedBox(height: 10),
                 TextFormField(
                   controller: _passwordController,
                   obscureText: _obscureText,
@@ -158,16 +149,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               : Icon(Icons.visibility_off))),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Không được để trống mật khẩu';
+                      return 'Vui lòng nhập mật khẩu của bạn';
                     } else if (value.length < 6) {
                       return 'Mật khẩu quá ngắn, vui lòng thử lại';
                     }
                     return null;
                   },
                 ),
-                SizedBox(
-                  height: 12,
-                ),
+                SizedBox(height: 12),
                 Row(
                   children: <Widget>[
                     Checkbox(
@@ -184,7 +173,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         text: TextSpan(
                           style: TextStyle(color: Colors.black),
                           children: <TextSpan>[
-                            TextSpan(text: 'Tôi chấp nhận '),
+                            TextSpan(text: 'Tôi đồng ý với '),
                             TextSpan(
                                 text: 'Điều khoản dịch vụ',
                                 style: TextStyle(fontWeight: FontWeight.bold)),
@@ -192,56 +181,50 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             TextSpan(
                                 text: 'Chính sách quyền riêng tư',
                                 style: TextStyle(fontWeight: FontWeight.bold)),
-                            TextSpan(text: ' của bạn'),
+                            TextSpan(text: ' của công ty bạn'),
                           ],
                         ),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 5,
-                ),
+                SizedBox(height: 5),
                 if (_showError)
                   Padding(
                     padding: const EdgeInsets.only(left: 31.0),
                     child: Text(
-                      "Vui lòng chấp nhận điều khoản dịch vụ và chính sách quyền riêng tư của chúng tôi để tiếp tục",
+                      "Vui lòng chấp nhận điều khoản và chính sách để tiếp tục",
                       style: TextStyle(color: Colors.red, fontSize: 12),
                     ),
                   ),
-                SizedBox(
-                  height: 22,
-                ),
+                SizedBox(height: 22),
                 Center(
                   child: SizedBox(
                     width: double.infinity,
                     height: 60,
                     child: ElevatedButton(
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                Color.fromARGB(255, 14, 2, 241))),
-                        onPressed: () {
-                          checkTickBox();
-                          register();
-                        },
-                        child: _isLoading
-                            ? SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 3,
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.white),
-                                ),
-                              )
-                            : const Text('Đăng ký')),
-                        // child: Text('Đăng kí')),
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                              Color.fromARGB(255, 14, 2, 241))),
+                      onPressed: () {
+                        checkTickBox();
+                        register();
+                      },
+                      child: _isLoading
+                          ? SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 3,
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+                            )
+                          : const Text('Đăng ký'),
+                    ),
                   ),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+                SizedBox(height: 10),
                 Center(
                   child: SizedBox(
                     width: double.infinity,
@@ -261,7 +244,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
               ],
-            )),
+            ),
+          ),
+        ),
       ),
     );
   }
