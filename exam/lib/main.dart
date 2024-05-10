@@ -34,44 +34,53 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         _isLoading = true;
       });
-      Future.delayed(const Duration(seconds: 2), () async {
-        // await FirebaseAuth.instance.signInWithEmailAndPassword(
-        //     email: _emailController.text, password: _passwordController.text);
-        // Navigator.push(context,
-        //     MaterialPageRoute(builder: (context) => const MainScreen()));
-        // setState(() {
-        //   _isLoading = false;
-        //   _emailController.clear();
-        //   _passwordController.clear();
-        // });
-        try {
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
-              email: _emailController.text, password: _passwordController.text);
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => MainScreen()));
-          setState(() {
-            _isLoading = false;
-            _emailController.clear();
-            _passwordController.clear();
-          });
-        } on FirebaseAuthException catch (e) {
-          if (e.code == 'user-not-found') {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                backgroundColor: Colors.orangeAccent,
-                content: Text(
-                  'No User Found for that Email',
-                  style: TextStyle(fontSize: 20),
-                )));
-          } else if (e.code == 'wrong-password') {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                backgroundColor: Colors.orangeAccent,
-                content: Text(
-                  'Wrong Password Provided by User',
-                  style: TextStyle(fontSize: 20),
-                )));
-          }
+      try {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: _emailController.text, password: _passwordController.text);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => MainScreen()));
+        setState(() {
+          _emailController.clear();
+          _passwordController.clear();
+        });
+      } on FirebaseAuthException catch (e) {
+        setState(() {
+          _isLoading = false;
+        });
+        if (e.code == 'user-not-found') {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Lỗi'),
+              content: Text('Không tìm thấy người dùng cho địa chỉ email này'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Đóng'),
+                ),
+              ],
+            ),
+          );
+        } else if (e.code == 'wrong-password') {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Lỗi'),
+              content: Text('Mật khẩu không đúng'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Đóng'),
+                ),
+              ],
+            ),
+          );
         }
-      });
+      }
     }
   }
 
@@ -197,23 +206,26 @@ class _MyAppState extends State<MyApp> {
                     width: double.infinity,
                     height: 60,
                     child: ElevatedButton(
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                const Color.fromARGB(255, 14, 2, 241))),
-                        onPressed: () {
-                          login();
-                        },
-                        child: _isLoading
-                            ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 3,
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.white),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                            const Color.fromARGB(255, 14, 2, 241)),
+                      ),
+                      onPressed: () {
+                        login(); // Removed setState(_isLoading = true);
+                      },
+                      child: _isLoading
+                          ? SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 3,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.white,
                                 ),
-                              )
-                            : const Text('Đăng nhập')),
+                              ),
+                            )
+                          : const Text('Đăng nhập'),
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
@@ -223,8 +235,9 @@ class _MyAppState extends State<MyApp> {
                     height: 60,
                     child: ElevatedButton(
                       style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.white)),
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.white),
+                      ),
                       onPressed: register,
                       child: const Text(
                         'Bạn là người mới? Đăng kí ngay',
