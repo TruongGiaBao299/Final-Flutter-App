@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
-import 'create_studyset.dart';
-import 'create_classes.dart';
 import 'create_folder.dart';
+import 'create_classes.dart';
+import 'create_studyset.dart';
 
 class LibraryScreen extends StatefulWidget {
-  const LibraryScreen({Key? key});
+  const LibraryScreen({Key? key}) : super(key: key);
 
   @override
   _LibraryScreenState createState() => _LibraryScreenState();
 }
 
+class Folder {
+  final String title;
+  final String description;
+
+  Folder(this.title, this.description);
+}
+
 class _LibraryScreenState extends State<LibraryScreen> {
   int _selectedIndex = 0;
+  List<Folder> _folders = []; // List to hold folder information
 
   @override
   Widget build(BuildContext context) {
@@ -21,56 +29,71 @@ class _LibraryScreenState extends State<LibraryScreen> {
         child: Column(
           children: [
             const SizedBox(height: 20), // Some top space
-            const Text(
-              'Library',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: Icon(Icons.library_books),
+                    ),
+                    const SizedBox(width: 10),
+                    const Text(
+                      'Library',
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                IconButton(
+                  onPressed: () {
+                    if (_selectedIndex == 1) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CreateClasses()),
+                      );
+                    } else if (_selectedIndex == 0) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CreateStudySet()),
+                      );
+                    } else if (_selectedIndex == 2) {
+                      _createFolder(context);
+                    }
+                  },
+                  icon: Icon(Icons.add, color: Colors.black),
+                ),
+              ],
             ),
-            const SizedBox(height: 20), // Some space between title and content
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildNavItem('Study Sets', 0),
-                _buildNavItem('Classes', 1),
-                _buildNavItem('Folders', 2),
+                _buildNavItem('Study Sets', Icons.book, 0),
+                _buildNavItem('Classes', Icons.class_, 1),
+                _buildNavItem('Folders', Icons.folder, 2),
               ],
             ),
-            const SizedBox(height: 20), // Some space between content and bottom
+            const SizedBox(height: 20),
             Expanded(
               child: IndexedStack(
                 index: _selectedIndex,
                 children: [
-                  Center(
-                    child: StudySetsContent(
-                      onCreateNew: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CreateStudySet()),
-                        );
-                      },
-                    ),
-                  ),
-                  Center(
-                    child: ClassesContent(
-                      onCreateNew: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CreateClasses()),
-                        );
-                      },
-                    ),
-                  ),
-                  Center(
-                    child: FoldersContent(
-                      onCreateNew: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CreateFolder()),
-                        );
-                      },
-                    ),
+                  StudySetsContent(),
+                  ClassesContent(),
+                  FoldersContent(
+                    onCreateNew: () {
+                      _createFolder(context);
+                    },
+                    folders: _folders,
+                    onDelete: (folder) {
+                      setState(() {
+                        _folders.remove(folder);
+                      });
+                    },
                   ),
                 ],
               ),
@@ -81,26 +104,21 @@ class _LibraryScreenState extends State<LibraryScreen> {
     );
   }
 
-  Widget _buildNavItem(String text, int index) {
+  Widget _buildNavItem(String text, IconData iconData, int index) {
     return GestureDetector(
       onTap: () {
         setState(() {
           _selectedIndex = index;
         });
       },
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color:
-                  _selectedIndex == index ? Colors.black : Colors.transparent,
-              width: 2.0,
-            ),
+      child: Column(
+        children: [
+          Icon(
+            iconData,
+            color: _selectedIndex == index ? Colors.black : Colors.grey,
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Text(
+          const SizedBox(height: 5),
+          Text(
             text,
             style: TextStyle(
               fontSize: 16,
@@ -108,117 +126,80 @@ class _LibraryScreenState extends State<LibraryScreen> {
               color: _selectedIndex == index ? Colors.black : Colors.grey,
             ),
           ),
-        ),
+        ],
       ),
     );
   }
 
-  void _showAddOptions(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Wrap(
-          children: <Widget>[
-            ListTile(
-              leading: const Icon(Icons.book),
-              title: const Text('Create Study Set'),
-              onTap: () {
-                Navigator.pop(context); // Close the bottom sheet
-                if (_selectedIndex == 0) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CreateStudySet()),
-                  );
-                }
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.folder),
-              title: const Text('Create Folder'),
-              onTap: () {
-                Navigator.pop(context); // Close the bottom sheet
-                if (_selectedIndex == 2) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CreateFolder()),
-                  );
-                }
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.class_),
-              title: const Text('Create Class'),
-              onTap: () {
-                Navigator.pop(context); // Close the bottom sheet
-                if (_selectedIndex == 1) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CreateClasses()),
-                  );
-                }
-              },
-            ),
-          ],
-        );
-      },
+  void _createFolder(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CreateFolder(
+          onSave: (title, description) {
+            setState(() {
+              _folders.add(Folder(title, description));
+            });
+          },
+        ),
+      ),
     );
   }
 }
 
 class StudySetsContent extends StatelessWidget {
-  final VoidCallback onCreateNew;
-
-  const StudySetsContent({required this.onCreateNew});
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ElevatedButton(
-          onPressed: onCreateNew,
-          child: const Text('Create New Study Set'),
-        ),
-        const SizedBox(height: 20),
-      ],
+    return Center(
+      child: Text('Study Sets Content'),
     );
   }
 }
 
 class ClassesContent extends StatelessWidget {
-  final VoidCallback onCreateNew;
-
-  const ClassesContent({required this.onCreateNew});
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ElevatedButton(
-          onPressed: onCreateNew,
-          child: const Text('Create New Class'),
-        ),
-      ],
+    return Center(
+      child: Text('Classes Content'),
     );
   }
 }
 
 class FoldersContent extends StatelessWidget {
   final VoidCallback onCreateNew;
+  final List<Folder> folders;
+  final Function(Folder) onDelete;
 
-  const FoldersContent({required this.onCreateNew});
+  const FoldersContent(
+      {required this.onCreateNew,
+      required this.folders,
+      required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ElevatedButton(
-          onPressed: onCreateNew,
-          child: const Text('Create New Folder'),
+    return ListView.builder(
+      itemCount: folders.length,
+      itemBuilder: (context, index) {
+        return _buildFolderCard(context, folders[index]);
+      },
+    );
+  }
+
+  Widget _buildFolderCard(BuildContext context, Folder folder) {
+    return Card(
+      elevation: 5,
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      child: ListTile(
+        leading: const Icon(Icons.folder),
+        title: Text(folder.title),
+        subtitle: Text(folder.description),
+        trailing: IconButton(
+          icon: Icon(Icons.delete),
+          onPressed: () {
+            onDelete(folder);
+          },
         ),
-      ],
+      ),
     );
   }
 }

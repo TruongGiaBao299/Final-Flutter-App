@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class CreateFolder extends StatefulWidget {
-  const CreateFolder({Key? key}) : super(key: key);
+  final Function(String, String) onSave;
+
+  const CreateFolder({Key? key, required this.onSave}) : super(key: key);
 
   @override
   _CreateFolderState createState() => _CreateFolderState();
@@ -10,6 +12,22 @@ class CreateFolder extends StatefulWidget {
 class _CreateFolderState extends State<CreateFolder> {
   final _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
+  late TextEditingController _titleController;
+  late TextEditingController _descriptionController;
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController = TextEditingController();
+    _descriptionController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +59,12 @@ class _CreateFolderState extends State<CreateFolder> {
               });
               if (_formKey.currentState!.validate()) {
                 // Form is validated
-                // Add your 'Done' button functionality here
-                // For now, just display a snackbar
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Processing Data...')),
+                // Send folder details back to LibraryScreen
+                widget.onSave(
+                  _titleController.text,
+                  _descriptionController.text,
                 );
+                Navigator.pop(context); // Close this screen
               }
             },
             child: const Text(
@@ -79,6 +98,7 @@ class _CreateFolderState extends State<CreateFolder> {
                 ),
                 const SizedBox(height: 10.0),
                 TextFormField(
+                  controller: _titleController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter title';
@@ -100,6 +120,7 @@ class _CreateFolderState extends State<CreateFolder> {
                 ),
                 const SizedBox(height: 10.0),
                 TextFormField(
+                  controller: _descriptionController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter description';

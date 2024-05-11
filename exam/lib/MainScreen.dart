@@ -43,8 +43,8 @@ class _MainScreenState extends State<MainScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          CreateStudySet()), // Navigate to CreateStudySet
+                    builder: (context) => CreateStudySet(),
+                  ),
                 );
               },
             ),
@@ -56,8 +56,13 @@ class _MainScreenState extends State<MainScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          CreateFolder()), // Navigate to CreateFolder
+                    builder: (context) => CreateFolder(
+                      onSave: (title, description) {
+                        // Here you can handle saving the folder data
+                        print('Title: $title, Description: $description');
+                      },
+                    ),
+                  ),
                 );
               },
             ),
@@ -69,8 +74,8 @@ class _MainScreenState extends State<MainScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          CreateClasses()), // Navigate to CreateClasses
+                    builder: (context) => CreateClasses(),
+                  ),
                 );
               },
             ),
