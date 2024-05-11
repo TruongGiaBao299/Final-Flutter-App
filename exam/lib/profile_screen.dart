@@ -1,5 +1,7 @@
+import 'package:exam/main.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
@@ -111,6 +113,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: ElevatedButton(
                     onPressed: () async {
                       await FirebaseAuth.instance.signOut();
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.setBool('isLoggedIn', false);
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(

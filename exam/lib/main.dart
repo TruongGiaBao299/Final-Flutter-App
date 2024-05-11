@@ -1,18 +1,33 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'register.dart';
 import 'reset_password.dart';
 import 'MainScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  bool isLoggedIn = await checkLoginStatus();
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     theme: ThemeData(useMaterial3: false),
-    home: const MyApp(),
+    home: isLoggedIn ? MainScreen() : MyApp(),
   ));
+}
+
+Future<void> saveLoginStatus(bool isLoggedIn) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setBool('isLoggedIn', isLoggedIn);
+}
+
+Future<bool> checkLoginStatus() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getBool('isLoggedIn') ?? false;
 }
 
 class MyApp extends StatefulWidget {
@@ -37,11 +52,13 @@ class _MyAppState extends State<MyApp> {
       try {
         await FirebaseAuth.instance.signInWithEmailAndPassword(
             email: _emailController.text, password: _passwordController.text);
+        await saveLoginStatus(true);
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => MainScreen()));
         setState(() {
           _emailController.clear();
           _passwordController.clear();
+          _isLoading = false;
         });
       } on FirebaseAuthException catch (e) {
         setState(() {
@@ -98,14 +115,30 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.only(top: 100, left: 15, right: 15),
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
           child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Quizlet',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 60,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   const Text(
                     'Email',
                     style: TextStyle(fontWeight: FontWeight.bold),

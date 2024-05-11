@@ -84,14 +84,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.only(top: 100, left: 15, right: 15),
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Quizlet',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 60,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
                 Text(
                   'Email',
                   style: TextStyle(fontWeight: FontWeight.bold),
