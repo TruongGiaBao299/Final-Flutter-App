@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      routes: {'/profile': (context) => MyApp()},
       title: 'Profile Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -116,7 +117,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       final SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       await prefs.setBool('isLoggedIn', false);
-                      Navigator.pop(context);
+                      Navigator.of(context).pushReplacementNamed('/login');
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,

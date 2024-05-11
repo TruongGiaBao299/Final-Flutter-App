@@ -14,6 +14,7 @@ void main() async {
   await Firebase.initializeApp();
   bool isLoggedIn = await checkLoginStatus();
   runApp(MaterialApp(
+    routes: {'/login': (context) => MyApp()},
     debugShowCheckedModeBanner: false,
     theme: ThemeData(useMaterial3: false),
     home: isLoggedIn ? MainScreen() : MyApp(),
@@ -31,7 +32,9 @@ Future<bool> checkLoginStatus() async {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({
+    super.key,
+  });
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -53,7 +56,7 @@ class _MyAppState extends State<MyApp> {
         await FirebaseAuth.instance.signInWithEmailAndPassword(
             email: _emailController.text, password: _passwordController.text);
         await saveLoginStatus(true);
-        Navigator.push(
+        Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => MainScreen()));
         setState(() {
           _emailController.clear();
