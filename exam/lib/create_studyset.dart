@@ -11,6 +11,15 @@ class _CreateStudySetState extends State<CreateStudySet> {
   List<Map<String, String>> boxes = [];
 
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +49,11 @@ class _CreateStudySetState extends State<CreateStudySet> {
               if (_formKey.currentState!.validate()) {
                 // Save functionality here
                 // For now, just print boxes
-                print(boxes);
+                Navigator.pop(context, {
+                  'title': _titleController.text,
+                  'description': _descriptionController.text,
+                  'terms': boxes,
+                });
               }
             },
             child: const Text(
@@ -71,6 +84,7 @@ class _CreateStudySetState extends State<CreateStudySet> {
                 ),
                 const SizedBox(height: 10.0),
                 TextFormField(
+                  controller: _titleController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter title';
@@ -92,6 +106,7 @@ class _CreateStudySetState extends State<CreateStudySet> {
                 ),
                 const SizedBox(height: 10.0),
                 TextFormField(
+                  controller: _descriptionController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter description';

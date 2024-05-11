@@ -9,7 +9,8 @@ class CreateClasses extends StatefulWidget {
 
 class _CreateClassesState extends State<CreateClasses> {
   final _formKey = GlobalKey<FormState>();
-  bool _autoValidate = false;
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -36,16 +37,17 @@ class _CreateClassesState extends State<CreateClasses> {
         actions: [
           TextButton(
             onPressed: () {
-              setState(() {
-                _autoValidate = true;
-              });
               if (_formKey.currentState!.validate()) {
                 // Form is validated
-                // Add your 'Done' button functionality here
-                // For now, just display a snackbar
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Processing Data...')),
-                );
+                // Get the entered data
+                String title = _titleController.text;
+                String description = _descriptionController.text;
+
+                // Pass the data back to the previous screen
+                Navigator.pop(context, {
+                  'title': title,
+                  'description': description,
+                });
               }
             },
             child: const Text(
@@ -62,9 +64,6 @@ class _CreateClassesState extends State<CreateClasses> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20.0),
           child: Form(
-            autovalidateMode: _autoValidate
-                ? AutovalidateMode.always
-                : AutovalidateMode.disabled,
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,6 +78,7 @@ class _CreateClassesState extends State<CreateClasses> {
                 ),
                 const SizedBox(height: 10.0),
                 TextFormField(
+                  controller: _titleController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter title';
@@ -100,6 +100,7 @@ class _CreateClassesState extends State<CreateClasses> {
                 ),
                 const SizedBox(height: 10.0),
                 TextFormField(
+                  controller: _descriptionController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter description';
@@ -119,5 +120,12 @@ class _CreateClassesState extends State<CreateClasses> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
   }
 }
