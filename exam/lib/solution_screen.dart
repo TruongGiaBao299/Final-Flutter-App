@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'flashCard_main.dart';
+import 'package:exam/quiz_screen.dart';
 
 class SolutionScreen extends StatelessWidget {
   const SolutionScreen({Key? key}) : super(key: key);
@@ -74,6 +75,9 @@ class SolutionScreen extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => FlashCard()));
+                        } else if (index == 1) {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => Quiz()));
                         }
                       },
                       child: Card(
