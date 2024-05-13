@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'flashCard_main.dart';
 
 class SolutionScreen extends StatelessWidget {
   const SolutionScreen({Key? key}) : super(key: key);
@@ -48,20 +49,61 @@ class SolutionScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Container(
-              height: 150, // Set a fixed height for the ListView
+              height: 60, // Set a fixed height for the ListView
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: 3,
                 itemBuilder: (context, index) {
+                  List<String> cardTitles = ["FlashCard", "Quiz", "Type"];
+                  List<IconData> iconTitles = [
+                    Icons.flash_on,
+                    Icons.quiz,
+                    Icons.type_specimen
+                  ];
+                  List<Color> colorIcon = [
+                    Colors.yellow,
+                    Colors.blue,
+                    Colors.blueAccent
+                  ];
                   return SizedBox(
                     width: 250,
-                    child: Card(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 5.0),
-                      color: Colors.white,
-                      elevation: 10, // Added elevation for shadow
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+                    child: InkWell(
+                      onTap: () {
+                        if (index == 0) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => FlashCard()));
+                        }
+                      },
+                      child: Card(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 10.0, vertical: 5.0),
+                        color: Colors.white,
+                        elevation: 10, // Added elevation for shadow
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                iconTitles[index],
+                                color: colorIcon[index],
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(cardTitles[index],
+                                  style: TextStyle(
+                                      fontSize: 15, // Adjust the font size here
+                                      fontWeight:
+                                          FontWeight.bold // Make text bold
+                                      )),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   );
