@@ -175,16 +175,20 @@ class _LibraryScreenState extends State<LibraryScreen> {
     return ListView.builder(
       itemCount: _studySets.length,
       itemBuilder: (context, index) {
-        return GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ViewStudySetScreen(studySet: _studySets[index]),
-              ),
-            );
-          },
-          child: _buildStudySetCard(context, _studySets[index]),
+        return SizedBox(
+          height: 100, // Set a fixed height for each card
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      ViewStudySetScreen(studySet: _studySets[index]),
+                ),
+              );
+            },
+            child: _buildStudySetCard(context, _studySets[index]),
+          ),
         );
       },
     );
@@ -223,7 +227,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
     return ListView.builder(
       itemCount: _classes.length,
       itemBuilder: (context, index) {
-        return _buildClassCard(context, _classes[index]);
+        return SizedBox(
+          height: 100, // Set a fixed height for each card
+          child: _buildClassCard(context, _classes[index]),
+        );
       },
     );
   }
@@ -252,7 +259,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
     return ListView.builder(
       itemCount: _folders.length,
       itemBuilder: (context, index) {
-        return _buildFolderCard(context, _folders[index]);
+        return SizedBox(
+          height: 100, // Set a fixed height for each card
+          child: _buildFolderCard(context, _folders[index]),
+        );
       },
     );
   }
