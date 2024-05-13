@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'create_folder.dart';
 import 'create_classes.dart';
 import 'create_studyset.dart';
+import 'view_studyset_screen.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({Key? key}) : super(key: key);
@@ -174,7 +175,17 @@ class _LibraryScreenState extends State<LibraryScreen> {
     return ListView.builder(
       itemCount: _studySets.length,
       itemBuilder: (context, index) {
-        return _buildStudySetCard(context, _studySets[index]);
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ViewStudySetScreen(studySet: _studySets[index]),
+              ),
+            );
+          },
+          child: _buildStudySetCard(context, _studySets[index]),
+        );
       },
     );
   }
