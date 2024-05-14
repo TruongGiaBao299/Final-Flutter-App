@@ -4,6 +4,7 @@ import 'package:exam/question_quiz_model.dart';
 import 'package:exam/question_widget.dart';
 // import 'package:exam/next_question_button.dart';
 import 'package:exam/option_card.dart';
+import 'package:exam/result_box.dart';
 
 class Quiz extends StatefulWidget {
   const Quiz({super.key});
@@ -37,7 +38,14 @@ class _QuizState extends State<Quiz> {
   bool isAlreadySelected = false;
   void nextQuestion() {
     if (index == _questions.length - 1) {
-      return;
+      showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (ctx) => ResultBox(
+                result: score,
+                questionLength: _questions.length,
+                isPressed: startOver,
+              ));
     } else if (isPressed) {
       setState(() {
         index++;
@@ -59,12 +67,22 @@ class _QuizState extends State<Quiz> {
     } else {
       if (value == true) {
         score++;
-        setState(() {
-          isPressed = true;
-          isAlreadySelected = true;
-        });
       }
+      setState(() {
+        isPressed = true;
+        isAlreadySelected = true;
+      });
     }
+  }
+
+  void startOver() {
+    setState(() {
+      index = 0;
+      score = 0;
+      isPressed = false;
+      isAlreadySelected = false;
+    });
+    Navigator.pop(context);
   }
 
   @override
