@@ -38,6 +38,7 @@ dependencies:
   firebase_auth: ^4.19.4
   shared_preferences: ^2.2.3
   flip_card: ^0.7.0
+  http: ^1.2.1
 
 dev_dependencies:
   flutter_test:
