@@ -19,11 +19,15 @@ class Folder {
 }
 
 class StudySet {
-  final String title;
-  final String description;
-  final List<Map<String, String>> terms;
+  String title;
+  String description;
+  List<Map<String, String>> terms;
 
-  StudySet(this.title, this.description, this.terms);
+  StudySet({
+    required this.title,
+    required this.description,
+    required this.terms,
+  });
 }
 
 class _LibraryScreenState extends State<LibraryScreen> {
@@ -150,8 +154,11 @@ class _LibraryScreenState extends State<LibraryScreen> {
 
     if (result != null) {
       setState(() {
-        _studySets.add(
-            StudySet(result['title'], result['description'], result['terms']));
+        _studySets.add(StudySet(
+          title: result['title']!,
+          description: result['description']!,
+          terms: List<Map<String, String>>.from(result['terms']!),
+        ));
       });
     }
   }
@@ -293,33 +300,6 @@ class Class {
   final String description;
 
   Class(this.title, this.description);
-}
-
-class StudySetsContent extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Study Sets Content'),
-    );
-  }
-}
-
-class ClassesContent extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Classes Content'),
-    );
-  }
-}
-
-class FoldersContent extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Folders Content'),
-    );
-  }
 }
 
 void main() {
