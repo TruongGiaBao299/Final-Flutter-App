@@ -143,7 +143,7 @@ class _QuizState extends State<Quiz> {
                     ),
                     SizedBox(
                       height: 25,
-                    ),
+                    ),  
                     for (int i = 0;
                         i < extractedData[index].options.length;
                         i++)

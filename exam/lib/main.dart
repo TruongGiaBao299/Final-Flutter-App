@@ -1,3 +1,5 @@
+import 'package:exam/db_connect.dart';
+import 'package:exam/typing_word_question_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +9,15 @@ import 'MainScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
+  // var db = DBconnect();
+  // db.addQuestion(typeQuestion(
+  //     givenTitle: 'GÀ RÁN',
+  //     titleAnswer: 'Fried Chicken',
+  //     hiddenWord: 'Fr___ Ch____'));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   bool isLoggedIn = await checkLoginStatus();
-  
+
   runApp(MaterialApp(
     routes: {'/login': (context) => MyApp()},
     debugShowCheckedModeBanner: false,
