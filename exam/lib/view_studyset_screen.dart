@@ -1,3 +1,7 @@
+import 'package:exam/constant.dart';
+import 'package:exam/flashCard_main.dart';
+import 'package:exam/quiz_screen.dart';
+import 'package:exam/type_word_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'library_screen.dart';
@@ -15,6 +19,22 @@ class ViewStudySetScreen extends StatefulWidget {
 
 class _ViewStudySetScreenState extends State<ViewStudySetScreen> {
   String? userEmail = FirebaseAuth.instance.currentUser?.email;
+  // Màu nền cho dialog
+  final Color dialogBackgroundColor = Colors.deepPurple[50]!; // Màu nền nhẹ
+
+// Màu chủ đạo và kiểu chữ cho title
+  final TextStyle titleStyle = TextStyle(
+    color: Colors.deepPurple, // Màu chữ
+    fontSize: 20, // Kích thước chữ
+    fontWeight: FontWeight.bold, // Độ đậm
+  );
+
+// Màu chủ đạo cho các nút trong dialog
+  final Color tileColor = Colors.deepPurple[100]!;
+  final TextStyle tileTextStyle = TextStyle(
+    color: Colors.deepPurple[900], // Màu chữ đậm
+    fontSize: 18, // Kích thước chữ
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -84,50 +104,109 @@ class _ViewStudySetScreenState extends State<ViewStudySetScreen> {
             child: Row(
               children: [
                 Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Navigate to flashcard screen
-                    },
-                    child: Text('Flashcard',
-                        style: TextStyle(color: Colors.white)),
+                  child: SizedBox(
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              backgroundColor: dialogBackgroundColor,
+                              title:
+                                  Text('Choose an option', style: titleStyle),
+                              content: SingleChildScrollView(
+                                child: ListBody(
+                                  children: <Widget>[
+                                    ListTile(
+                                      tileColor: tileColor,
+                                      title: Text('FlashCard',
+                                          style: tileTextStyle),
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    FlashCard()));
+                                      },
+                                    ),
+                                    ListTile(
+                                      tileColor: tileColor,
+                                      title: Text('Quiz', style: tileTextStyle),
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => Quiz()));
+                                      },
+                                    ),
+                                    ListTile(
+                                      tileColor: tileColor,
+                                      title: Text('Typing Word',
+                                          style: tileTextStyle),
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    TypeWordScreen()));
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    20), // Bo góc cho dialog
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Text('Learn',
+                          style: TextStyle(color: Colors.white, fontSize: 25)),
+                    ),
                   ),
                 ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Navigate to learn screen
-                    },
-                    child: Text('Learn', style: TextStyle(color: Colors.white)),
-                  ),
-                ),
+                // SizedBox(width: 10),
+                // Expanded(
+                //   child: ElevatedButton(
+                //     onPressed: () {
+                //       // Navigate to learn screen
+                //     },
+                //     child: Text('Learn', style: TextStyle(color: Colors.white)),
+                //   ),
+                // ),
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Navigate to test screen
-                    },
-                    child: Text('Test', style: TextStyle(color: Colors.white)),
-                  ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Navigate to match screen
-                    },
-                    child: Text('Match', style: TextStyle(color: Colors.white)),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 20),
+          //   child: Row(
+          //     children: [
+          //       Expanded(
+          //         child: ElevatedButton(
+          //           onPressed: () {
+          //             // Navigate to test screen
+          //           },
+          //           child: Text('Test', style: TextStyle(color: Colors.white)),
+          //         ),
+          //       ),
+          //       SizedBox(width: 10),
+          //       Expanded(
+          //         child: ElevatedButton(
+          //           onPressed: () {
+          //             // Navigate to match screen
+          //           },
+          //           child: Text('Match', style: TextStyle(color: Colors.white)),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
           SizedBox(height: 20),
           Expanded(
             child: Padding(

@@ -1,5 +1,4 @@
 import 'package:exam/typing_word_question_model.dart';
-import 'package:exam/typing_word_question_widget.dart';
 import 'package:http/http.dart' as http;
 import 'package:exam/question_quiz_model.dart';
 import 'dart:convert';
