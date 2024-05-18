@@ -3,6 +3,7 @@ import 'create_folder.dart';
 import 'create_classes.dart';
 import 'create_studyset.dart';
 import 'view_studyset_screen.dart';
+import 'view_folder_screen.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({Key? key}) : super(key: key);
@@ -268,8 +269,16 @@ class _LibraryScreenState extends State<LibraryScreen> {
       itemBuilder: (context, index) {
         return SizedBox(
           height: 100, // Set a fixed height for each card
+          child: GestureDetector(
+            onTap: () =>
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => 
+                    ViewFolderScreen(folder: _folders[index])),
+          ),
           child: _buildFolderCard(context, _folders[index]),
-        );
+        ));
       },
     );
   }
