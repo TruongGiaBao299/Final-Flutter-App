@@ -8,8 +8,23 @@ class SolutionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<Map<String, String>> books = [
+      {
+        "title": "To Kill a Mockingbird",
+        "author": "Harper Lee",
+      },
+      {
+        "title": "1984",
+        "author": "George Orwell",
+      },
+      {
+        "title": "Pride and Prejudice",
+        "author": "Jane Austen",
+      },
+    ];
+
     return Scaffold(
-      backgroundColor: Colors.white, // Set background color to white
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,7 +66,7 @@ class SolutionScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Container(
-              height: 60, // Set a fixed height for the ListView
+              height: 60,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: 3,
@@ -60,12 +75,12 @@ class SolutionScreen extends StatelessWidget {
                   List<IconData> iconTitles = [
                     Icons.flash_on,
                     Icons.quiz,
-                    Icons.type_specimen
+                    Icons.text_fields,
                   ];
                   List<Color> colorIcon = [
                     Colors.yellow,
                     Colors.blue,
-                    Colors.blueAccent
+                    Colors.blueAccent,
                   ];
                   return SizedBox(
                     width: 250,
@@ -90,7 +105,7 @@ class SolutionScreen extends StatelessWidget {
                         margin: const EdgeInsets.symmetric(
                             horizontal: 10.0, vertical: 5.0),
                         color: Colors.white,
-                        elevation: 10, // Added elevation for shadow
+                        elevation: 10,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -102,15 +117,11 @@ class SolutionScreen extends StatelessWidget {
                                 iconTitles[index],
                                 color: colorIcon[index],
                               ),
-                              SizedBox(
-                                width: 10,
-                              ),
+                              const SizedBox(width: 10),
                               Text(cardTitles[index],
-                                  style: TextStyle(
-                                      fontSize: 15, // Adjust the font size here
-                                      fontWeight:
-                                          FontWeight.bold // Make text bold
-                                      )),
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold)),
                             ],
                           ),
                         ),
@@ -147,20 +158,52 @@ class SolutionScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Container(
-              height: 150, // Set a fixed height for the ListView
+              height: 150,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 3,
+                itemCount: books.length,
                 itemBuilder: (context, index) {
+                  final book = books[index];
                   return SizedBox(
                     width: 250,
                     child: Card(
                       margin: const EdgeInsets.symmetric(
                           horizontal: 10.0, vertical: 5.0),
                       color: Colors.white,
-                      elevation: 10, // Added elevation for shadow
+                      elevation: 10,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.book,
+                              size: 50,
+                              color: Colors.blueAccent,
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              book['title']!,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              book['author']!,
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );
@@ -172,4 +215,10 @@ class SolutionScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: SolutionScreen(),
+  ));
 }
