@@ -13,12 +13,12 @@ class FlashCard extends StatefulWidget {
 
 class _FlashCardState extends State<FlashCard> {
   List<FlashCardContainer> _flashCard = [
-    FlashCardContainer(question: "Fried Chicken", answer: "Gà rán"),
-    FlashCardContainer(question: "Fish", answer: "Cá"),
-    FlashCardContainer(question: "Meat", answer: "Thịt"),
-    FlashCardContainer(question: "Pork", answer: "Thịt heo"),
-    FlashCardContainer(question: "Beef steak", answer: "Bò miếng"),
-    FlashCardContainer(question: "Salad", answer: "xà lách"),
+    FlashCardContainer(question: "Hello", answer: "Xin chào"),
+    FlashCardContainer(question: "Good bye", answer: "Tạm biệt"),
+    FlashCardContainer(question: "Eat", answer: "Ăn"),
+    FlashCardContainer(question: "Drink", answer: "Uống"),
+    FlashCardContainer(question: "Ice cream", answer: "Kem"),
+    FlashCardContainer(question: "Salad", answer: "Xà lách"),
     FlashCardContainer(question: "Vegetable", answer: "Rau củ quả"),
   ];
 

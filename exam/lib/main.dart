@@ -1,4 +1,5 @@
 import 'package:exam/db_connect.dart';
+import 'package:exam/question_quiz_model.dart';
 import 'package:exam/typing_word_question_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,6 +10,76 @@ import 'MainScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
+  // var db = DBconnect();
+  // db.addQuestion(typeQuestion(
+  //     givenTitle: 'Xin chào', titleAnswer: 'Hello', hiddenWord: 'H____'));
+  // db.addQuestion(typeQuestion(
+  //     givenTitle: 'Tạm biệt', titleAnswer: 'Good Bye', hiddenWord: 'G__d B_e'));
+  // db.addQuestion(
+  //     typeQuestion(givenTitle: 'Ăn', titleAnswer: 'Eat', hiddenWord: 'E__'));
+  // db.addQuestion(typeQuestion(
+  //     givenTitle: 'Uống', titleAnswer: 'Drink', hiddenWord: 'Dr___'));
+  // db.addQuestion(typeQuestion(
+  //     givenTitle: 'Kem', titleAnswer: 'Ice cream', hiddenWord: 'I___ c___'));
+  // db.addQuestion(typeQuestion(
+  //     givenTitle: 'Xà lách', titleAnswer: 'Salad', hiddenWord: 'S_l__'));
+  // db.addQuestion(typeQuestion(
+  //     givenTitle: 'Rau củ quả',
+  //     titleAnswer: 'Vegetable',
+  //     hiddenWord: 'V__t___'));
+  // db.addQuestion(Questions(
+  //     id: '1',
+  //     title: 'What is the meaning of "Hello"',
+  //     options: {
+  //       'Xin chào': true,
+  //       'Tạm biệt': false,
+  //       'Đi ngủ': false,
+  //       'Anh ấy': false
+  //     }));
+  // db.addQuestion(Questions(
+  //     id: '2',
+  //     title: 'What is the meaning of "Good Bye"',
+  //     options: {
+  //       'Xin chào': false,
+  //       'Tạm biệt': true,
+  //       'Đi ngủ': false,
+  //       'Anh ấy': false
+  //     }));
+  // db.addQuestion(Questions(
+  //     id: '3',
+  //     title: 'What is the meaning of "Eat"',
+  //     options: {'Uống': false, 'Ngủ': false, 'Ăn': true, 'Anh ấy': false}));
+  // db.addQuestion(Questions(
+  //     id: '4',
+  //     title: 'What is the meaning of "Drink"',
+  //     options: {'Uống': true, 'Ngủ': false, 'Ăn': false, 'Anh ấy': false}));
+  // db.addQuestion(Questions(
+  //     id: '5',
+  //     title: 'What is the meaning of "Ice cream"',
+  //     options: {
+  //       'Sữa chua': false,
+  //       'Kem': true,
+  //       'Trái táo': false,
+  //       'Thịt kho': false
+  //     }));
+  // db.addQuestion(Questions(
+  //     id: '6',
+  //     title: 'What is the meaning of "Salad"',
+  //     options: {
+  //       'Trái cây': false,
+  //       'Ngũ cốc': false,
+  //       'Xà lách': true,
+  //       'Trái lê': false
+  //     }));
+  // db.addQuestion(Questions(
+  //     id: '7',
+  //     title: 'What is the meaning of "Vegetable"',
+  //     options: {
+  //       'Rau củ quả': true,
+  //       'Tạm biệt': false,
+  //       'Đi ngủ': false,
+  //       'Anh ấy': false
+  //     }));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   bool isLoggedIn = await checkLoginStatus();
