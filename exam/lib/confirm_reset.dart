@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:exam/main.dart';
 
 class confirmReset extends StatefulWidget {
   String email;
@@ -7,8 +8,6 @@ class confirmReset extends StatefulWidget {
   @override
   State<confirmReset> createState() => _confirmResetState();
 }
-
-
 
 class _confirmResetState extends State<confirmReset> {
   @override
@@ -61,8 +60,8 @@ class _confirmResetState extends State<confirmReset> {
                 children: [
                   InkWell(
                     onTap: () {
-                      Navigator.popUntil(context, ModalRoute.withName('/'));
-                      print(widget.email);
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => MyApp()));
                     },
                     mouseCursor: MaterialStateMouseCursor.clickable,
                     child: Text(
