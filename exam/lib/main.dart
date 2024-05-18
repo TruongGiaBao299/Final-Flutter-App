@@ -9,11 +9,6 @@ import 'MainScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
-  // var db = DBconnect();
-  // db.addQuestion(typeQuestion(
-  //     givenTitle: 'GÀ RÁN',
-  //     titleAnswer: 'Fried Chicken',
-  //     hiddenWord: 'Fr___ Ch____'));
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   bool isLoggedIn = await checkLoginStatus();

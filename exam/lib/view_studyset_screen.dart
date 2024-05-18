@@ -20,21 +20,21 @@ class ViewStudySetScreen extends StatefulWidget {
 class _ViewStudySetScreenState extends State<ViewStudySetScreen> {
   String? userEmail = FirebaseAuth.instance.currentUser?.email;
   // Màu nền cho dialog
-  final Color dialogBackgroundColor = Colors.deepPurple[50]!; // Màu nền nhẹ
+//   final Color dialogBackgroundColor = Colors.deepPurple[1]!; // Màu nền nhẹ
 
-// Màu chủ đạo và kiểu chữ cho title
-  final TextStyle titleStyle = TextStyle(
-    color: Colors.deepPurple, // Màu chữ
-    fontSize: 20, // Kích thước chữ
-    fontWeight: FontWeight.bold, // Độ đậm
-  );
+// // Màu chủ đạo và kiểu chữ cho title
+//   final TextStyle titleStyle = TextStyle(
+//     color: Colors.deepPurple, // Màu chữ
+//     fontSize: 20, // Kích thước chữ
+//     fontWeight: FontWeight.bold, // Độ đậm
+//   );
 
-// Màu chủ đạo cho các nút trong dialog
-  final Color tileColor = Colors.deepPurple[100]!;
-  final TextStyle tileTextStyle = TextStyle(
-    color: Colors.deepPurple[900], // Màu chữ đậm
-    fontSize: 18, // Kích thước chữ
-  );
+// // Màu chủ đạo cho các nút trong dialog
+//   final Color tileColor = Colors.deepPurple[100]!;
+//   final TextStyle tileTextStyle = TextStyle(
+//     color: Colors.deepPurple[900], // Màu chữ đậm
+//     fontSize: 18, // Kích thước chữ
+//   );
 
   @override
   Widget build(BuildContext context) {
@@ -112,16 +112,25 @@ class _ViewStudySetScreenState extends State<ViewStudySetScreen> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              backgroundColor: dialogBackgroundColor,
-                              title:
-                                  Text('Choose an option', style: titleStyle),
+                              title: Text('Learning Through:'),
                               content: SingleChildScrollView(
                                 child: ListBody(
                                   children: <Widget>[
                                     ListTile(
-                                      tileColor: tileColor,
-                                      title: Text('FlashCard',
-                                          style: tileTextStyle),
+                                      title: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.flash_on,
+                                            color: Colors.yellow,
+                                          ),
+                                          SizedBox(
+                                            width: 12,
+                                          ),
+                                          Text(
+                                            'FlashCard',
+                                          ),
+                                        ],
+                                      ),
                                       onTap: () {
                                         Navigator.pop(context);
                                         Navigator.push(
@@ -132,8 +141,20 @@ class _ViewStudySetScreenState extends State<ViewStudySetScreen> {
                                       },
                                     ),
                                     ListTile(
-                                      tileColor: tileColor,
-                                      title: Text('Quiz', style: tileTextStyle),
+                                      title: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.quiz,
+                                            color: Colors.blue,
+                                          ),
+                                          SizedBox(
+                                            width: 12,
+                                          ),
+                                          Text(
+                                            'Quiz',
+                                          ),
+                                        ],
+                                      ),
                                       onTap: () {
                                         Navigator.pop(context);
                                         Navigator.push(
@@ -143,9 +164,20 @@ class _ViewStudySetScreenState extends State<ViewStudySetScreen> {
                                       },
                                     ),
                                     ListTile(
-                                      tileColor: tileColor,
-                                      title: Text('Typing Word',
-                                          style: tileTextStyle),
+                                      title: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.type_specimen,
+                                            color: Colors.blue,
+                                          ),
+                                          SizedBox(
+                                            width: 12,
+                                          ),
+                                          Text(
+                                            'Typing Word',
+                                          ),
+                                        ],
+                                      ),
                                       onTap: () {
                                         Navigator.pop(context);
                                         Navigator.push(
@@ -166,8 +198,18 @@ class _ViewStudySetScreenState extends State<ViewStudySetScreen> {
                           },
                         );
                       },
-                      child: Text('Learn',
-                          style: TextStyle(color: Colors.white, fontSize: 25)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.try_sms_star),
+                          SizedBox(
+                            width: 12,
+                          ),
+                          Text('Learn',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 25)),
+                        ],
+                      ),
                     ),
                   ),
                 ),
